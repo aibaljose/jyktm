@@ -34,7 +34,7 @@ const Home = ({ user }) => {
   };
 
   React.useEffect(() => {
-    storeAccessLog();
+    // storeAccessLog();
   }, [location.search]);
 
   // Check if logged-in user has complete registration
@@ -169,7 +169,7 @@ const Home = ({ user }) => {
       } else {
         // Existing user - check if they have mobile and admission number
         const userData = userDoc.data();
-        if (userData.mobile) {
+        if (userData.mobile && userData.admissionNo) {
           setIsRegistrationComplete(true);
         } else {
           // User exists but missing mobile/admission data
@@ -186,7 +186,7 @@ const Home = ({ user }) => {
   }
 
   // CHECK UNIQUENESS
-  async function checkUniqueness(mobile) {
+  async function checkUniqueness(mobile, admissionNo) {
     try {
       // Check mobile number uniqueness
       const mobileQuery = query(
@@ -200,15 +200,15 @@ const Home = ({ user }) => {
       }
 
       // Check admission number uniqueness
-      // const admissionQuery = query(
-      //   collection(db, "users"),
-      //   where("admissionNo", "==", admissionNo)
-      // );
-      // const admissionSnapshot = await getDocs(admissionQuery);
+      const admissionQuery = query(
+        collection(db, "users"),
+        where("admissionNo", "==", admissionNo)
+      );
+      const admissionSnapshot = await getDocs(admissionQuery);
 
-      // if (!admissionSnapshot.empty) {
-      //   return { isUnique: false, error: "Admission number is already registered" };
-      // }
+      if (!admissionSnapshot.empty) {
+        return { isUnique: false, error: "Admission number is already registered" };
+      }
 
       return { isUnique: true, error: null };
     } catch (error) {
@@ -236,16 +236,16 @@ const Home = ({ user }) => {
     }
 
     // Validate admission number format (basic validation)
-    // if (!admissionNo.trim()) {
-    //   return setError("Please enter your admission number");
-    // }
+    if (!admissionNo.trim()) {
+      return setError("Please enter your admission number");
+    }
 
     try {
       setLoading(true);
       setError("Checking if mobile number and admission number are available...");
 
       // Check uniqueness
-      const uniquenessCheck = await checkUniqueness(cleanMobile);
+      const uniquenessCheck = await checkUniqueness(cleanMobile, admissionNo.trim());
 
       if (!uniquenessCheck.isUnique) {
         return setError(uniquenessCheck.error);
@@ -256,10 +256,10 @@ const Home = ({ user }) => {
       // Save user data to Firestore
       await setDoc(doc(db, "users", tempUser.uid), {
         uid: tempUser.uid,
-        name: tempUser.displayName,
+        ename: tempUser.displayName,
         email: tempUser.email,
         mobile: cleanMobile,
-        // admissionNo: admissionNo.trim(),
+        name: admissionNo.trim(),
         createdAt: new Date()
       });
 
@@ -410,7 +410,39 @@ const Home = ({ user }) => {
           <p className="text-center mt-3 text-lg text-dark-700 font-semibold">
             Welcome, {user.displayName}. Your Christmas friend arrives soon!
           </p>
-         
+          {/* <div className="mt-6">
+            <label className="block text-red-700 font-semibold mb-2">
+              🎁 Today's Task
+            </label>
+
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-3">
+              <p className="text-red-700 font-medium">{currentTask}</p>
+            </div>
+
+            <div className="flex items-center mb-3">
+              <input
+                type="checkbox"
+                id="taskDone"
+                checked={isTaskCompleted}
+                onChange={async (e) => {
+                  const completed = e.target.checked;
+                  setIsTaskCompleted(completed);
+                  await saveTaskCompletion(currentTask, completed);
+                }}
+                className="h-5 w-5 text-green-600 rounded"
+              />
+              <label htmlFor="taskDone" className="ml-2 text-green-700 font-medium">
+                Mark as completed
+              </label>
+            </div>
+
+            {isTaskCompleted && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-3">
+                <p className="text-green-700 text-sm">✅ Great job! You've completed today's task!</p>
+              </div>
+            )}
+           
+          </div> */}
 
           <button
             onClick={handleLogout}
@@ -496,13 +528,13 @@ const Home = ({ user }) => {
                 required
               />
 
-              {/* <input
+              <input
                 type="text"
-                placeholder="Admission Number"
+                placeholder="Name"
                 className="w-full p-3 mt-4 rounded-lg border-2 border-red-300 bg-white/70"
                 onChange={(e) => setAdmissionNo(e.target.value)}
                 required
-              /> */}
+              />
 
               <button
                 type="submit"
