@@ -241,16 +241,10 @@ const Home = ({ user }) => {
         setShowAdditionalFields(true);
         setIsRegistrationComplete(false);
       } else {
-        // Existing user - check if they have phone and name
-        const userData = userDoc.data();
-        if (userData.phone && userData.name) {
-          setIsRegistrationComplete(true);
-        } else {
-          // User exists but missing phone/name data
-          setTempUser(user);
-          setShowAdditionalFields(true);
-          setIsRegistrationComplete(false);
-        }
+        // User already exists in database - proceed regardless of complete data
+        setIsRegistrationComplete(true);
+        setShowAdditionalFields(false);
+        setTempUser(null);
       }
     } catch (err) {
       setError(err.message);
