@@ -574,44 +574,8 @@ const Home = ({ user }) => {
           JY Christmas Friend
         </h1>
 
-        {!isRegistrationComplete ? (
-          <>
-            <h2 className="text-xl text-center text-dark-700 mb-4">
-              Complete Your Registration
-            </h2>
-
-            {error && (
-              <p className="text-red-600 text-sm text-center mt-2 font-semibold">{error}</p>
-            )}
-
-            <form onSubmit={handleCompleteRegistration}>
-              <input
-                type="text"
-                placeholder="Full Name"
-                className="w-full p-3 mt-4 rounded-lg border-2 border-red-300 bg-white/70"
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-
-              <input
-                type="tel"
-                placeholder="Phone Number"
-                className="w-full p-3 mt-4 rounded-lg border-2 border-red-300 bg-white/70"
-                onChange={(e) => setPhone(e.target.value)}
-                required
-              />
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-green-600 to-red-600 text-white p-3 rounded-lg mt-6 shadow-lg hover:scale-[1.02]"
-              >
-                {loading ? "Completing..." : "Complete Registration"}
-              </button>
-            </form>
-          </>
-        ) : (
-          <>
+       
+          
 
             <h2 className="text-2xl font-extrabold text-center text-red-400 mb-4">
               Welcome!
@@ -634,8 +598,11 @@ const Home = ({ user }) => {
               </svg>
               {loading ? "Signing in..." : "Continue with Google"}
             </button>
-          </>
-        )}
+      
+     
+  
+         
+      
       </div>
     </div>
   );
