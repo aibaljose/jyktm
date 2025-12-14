@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import Home from "./home";
+import Match from "./match"
 
 function App() {
   const [user, setUser] = useState(null);
@@ -30,6 +31,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home user={user} />} />
         <Route path="/getdata" element={<Home user={user} />} />
+        <Route path="/match" element={<Match />} />
       </Routes>
     </BrowserRouter>
   );
