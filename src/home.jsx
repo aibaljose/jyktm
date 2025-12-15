@@ -98,7 +98,7 @@ const Home = ({ user }) => {
           const userDoc = await getDoc(doc(db, "users", user.uid));
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            if (userData.phone && userData.name) {
+            if (userData.mobile && userData.name) {
               setIsRegistrationComplete(true);
               setShowAdditionalFields(false);
               setTempUser(null);
