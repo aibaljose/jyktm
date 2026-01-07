@@ -43,9 +43,6 @@ const Home = ({ user }) => {
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
-  const [currentTask, setCurrentTask] = useState("Call a friend you haven't spoken to in a while");
-  const [isTaskCompleted, setIsTaskCompleted] = useState(false);
-  const [customTask, setCustomTask] = useState("");
   const [revealed, setRevealed] = useState(false);
   const [assignedFriend, setAssignedFriend] = useState(null);
   const [loadingFriend, setLoadingFriend] = useState(false);
@@ -102,10 +99,9 @@ const Home = ({ user }) => {
               setIsRegistrationComplete(true);
               setShowAdditionalFields(false);
               setTempUser(null);
-              setShowInstructionsModal(true); // Show instructions modal for returning users
-              // Load today's task and assigned friend
+              setShowInstructionsModal(true);
+              // Load assigned friend
               setTimeout(() => {
-                loadTodayTask();
                 loadAssignedFriend();
               }, 1000);
             } else {
@@ -347,9 +343,7 @@ const Home = ({ user }) => {
       setError("");
       setIsCheckingRegistration(false);
       setShowInstructionsModal(false);
-      setCurrentTask("Call a friend you haven’t spoken to in a while");
-      setIsTaskCompleted(false);
-      setCustomTask("");
+
     } catch (err) {
       setError(err.message);
     }
